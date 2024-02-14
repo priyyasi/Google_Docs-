@@ -17,6 +17,7 @@ import { getSession, useSession } from "next-auth/react";
 import Login from "@/components/Login";
 import { useState } from "react";
 
+
 export default function Home() {
   const { data: session } = useSession();
   const [showModal, setShowModal] = useState(false);
