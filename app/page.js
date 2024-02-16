@@ -1,14 +1,6 @@
 "use client";
-
 import Header from "@/components/Header";
-
-import {
-  ThemeProvider,
-  Button,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+import { ThemeProvider, Button, Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 export { ThemeProvider, Button };
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FolderIcon from "@mui/icons-material/Folder";
@@ -16,16 +8,44 @@ import Image from "next/image";
 import { getSession, useSession } from "next-auth/react";
 import Login from "@/components/Login";
 import { useState } from "react";
+import { db } from "@/firebase";
+import { addDoc, collection, orderBy, serverTimestamp, query } from "firebase/firestore";
+import { useCollectionOnce } from "react-firebase-hooks/firestore";
+import DocumentRow from "@/components/DocumentRow";
 
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [showModal, setShowModal] = useState(false);
   const [input, setInput] = useState("");
 
-  if (!session) return <Login />;
+  // const [snapshot] = useCollectionOnce(collection(db, "userDocs", session.user.email, "docs"));     // orderBy("timestamp", "desc")
 
-  const createDocument = () => {};
+  const [snapshot] = useCollectionOnce(
+    session?.user?.email
+      ? query(collection(db, 'userDocs', session.user.email, 'docs'), orderBy("timestamp", "desc"))
+      : null
+  );
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+  if (!session) return <Login />;
+  
+
+  const createDocument = async () => {
+    if (!input) return;
+    const userEmail = session.user.email;
+
+    const userDocsCollectionRef = collection(db, "userDocs", userEmail, "docs");
+
+    const docRef = await addDoc(userDocsCollectionRef, {
+      fileName: input,
+      timestamp: serverTimestamp(),
+    });
+    setInput("");
+    setShowModal(false);
+  };
 
   const modal = (
     <Dialog size="xs" open={showModal} handler={() => setShowModal(false)}>
@@ -92,6 +112,15 @@ export default function Home() {
             <p className="mr-12">Date Created</p>
             <FolderIcon className="text-gray-600" />
           </div>
+
+          {snapshot?.docs.map(doc => (
+            <DocumentRow 
+              key = {doc.id}
+              id = {doc.id}
+              fileName = {doc.data().fileName}
+              date = {doc.data().timestamp}
+            />
+          ))}
         </div>
       </section>
     </div>
