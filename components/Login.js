@@ -9,14 +9,15 @@ function Login() {
         src="/assets/docs_logo.png"
         height={200}
         width={300}
-        objectFit="contain"
+        style={{ width: "auto", height: "auto" }}
+        alt="img"
+        priority={true}
       />
       <h2></h2>
       <Button
         className="w-44 mt-7"
         color="blue"
         variant="filled"
-        ripple="light"
         onClick={() => signIn()}
       >
         Login

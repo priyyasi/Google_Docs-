@@ -64,7 +64,6 @@ export default function Home() {
           class="blue"
           variant="text"
           onClick={(e) => setShowModal(false)}
-          ripple="dark"
           className="text-blue-700"
         >
           Cancel
@@ -73,7 +72,6 @@ export default function Home() {
           color="blue"
           variant="filled"
           onClick={createDocument}
-          ripple="light"
         >
           Create
         </Button>
@@ -97,7 +95,7 @@ export default function Home() {
               onClick={() => setShowModal(true)}
               className="relative h-52 w-40 border-2 cursor-pointer hover:border-blue-700"
             >
-              <Image src="https://links.papareact.com/pju" layout="fill" />
+              <Image src="https://links.papareact.com/pju" layout="fill" alt="img" />
             </div>
             <p className="ml-2 mt-2 font-semibold text-sm text-gray-700">
               Blank

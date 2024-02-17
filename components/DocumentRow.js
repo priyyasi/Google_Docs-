@@ -20,7 +20,6 @@ function DocumentRow({ id, fileName, date }) {
         variant="text"
         rounded={true}
         iconOnly={true}
-        ripple="dark"
         className="border-0 py-0 px-0 m-0"
       >
         <MoreVertIcon />

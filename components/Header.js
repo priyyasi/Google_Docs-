@@ -39,6 +39,7 @@ function Header() {
         height={40}
         className="hidden md:inline-flex cursor-pointer rounded-full ml-2"
         onClick={signOut}
+        alt="img"
       />
     </header>
   );
