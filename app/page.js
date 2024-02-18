@@ -30,7 +30,7 @@ export default function Home() {
 
   const [documentRows, setDocumentRows] = useState([]);
   useEffect(() => {
-    if (snapshot && snapshot.docs.length > 0) {
+    if (snapshot) {
       const documents = snapshot.docs.map((doc) => (
         <DocumentRow
           key={doc.id}
@@ -39,7 +39,6 @@ export default function Home() {
           date={doc.data().timestamp}
         />
       ));
-      console.log(documents);
       setDocumentRows(documents);
     }
   }, [snapshot]);
@@ -113,7 +112,7 @@ export default function Home() {
               onClick={() => setShowModal(true)}
               className="relative h-52 w-40 border-2 cursor-pointer hover:border-blue-700"
             >
-              <Image src="https://links.papareact.com/pju" layout="fill" alt="img" />
+              <Image src="https://links.papareact.com/pju" alt="img" width={800} height={600} priority={true} />
             </div>
             <p className="ml-2 mt-2 font-semibold text-sm text-gray-700">
               Blank
