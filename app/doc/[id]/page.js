@@ -10,6 +10,7 @@ import { collection, doc } from "firebase/firestore";
 import PeopleIcon from '@mui/icons-material/People';
 import Image from "next/image";
 import TextEditor from "@/components/TextEditor";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 
 export default function page({ params }) { 
@@ -24,7 +25,7 @@ export default function page({ params }) {
   }
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <LoadingSkeleton />;
   }
   if (!session) return <Login />;
 

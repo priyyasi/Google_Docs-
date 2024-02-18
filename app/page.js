@@ -12,6 +12,7 @@ import { db } from "@/firebase";
 import { addDoc, collection, orderBy, serverTimestamp, query } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import DocumentRow from "@/components/DocumentRow";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 
 export default function Home() {
@@ -45,7 +46,7 @@ export default function Home() {
 
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <LoadingSkeleton />;
   }
   if (!session) return <Login />;
   
