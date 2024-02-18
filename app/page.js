@@ -7,10 +7,10 @@ import FolderIcon from "@mui/icons-material/Folder";
 import Image from "next/image";
 import { getSession, useSession } from "next-auth/react";
 import Login from "@/components/Login";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "@/firebase";
 import { addDoc, collection, orderBy, serverTimestamp, query } from "firebase/firestore";
-import { useCollectionOnce } from "react-firebase-hooks/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 import DocumentRow from "@/components/DocumentRow";
 
 
@@ -21,11 +21,28 @@ export default function Home() {
 
   // const [snapshot] = useCollectionOnce(collection(db, "userDocs", session.user.email, "docs"));     // orderBy("timestamp", "desc")
 
-  const [snapshot] = useCollectionOnce(
+  const [snapshot] = useCollection(
     session?.user?.email
       ? query(collection(db, 'userDocs', session.user.email, 'docs'), orderBy("timestamp", "desc"))
       : null
   );
+
+  const [documentRows, setDocumentRows] = useState([]);
+  useEffect(() => {
+    if (snapshot && snapshot.docs.length > 0) {
+      const documents = snapshot.docs.map((doc) => (
+        <DocumentRow
+          key={doc.id}
+          id={doc.id}
+          fileName={doc.data().fileName}
+          date={doc.data().timestamp}
+        />
+      ));
+      console.log(documents);
+      setDocumentRows(documents);
+    }
+  }, [snapshot]);
+
 
   if (status === "loading") {
     return <div>Loading...</div>;
@@ -111,23 +128,16 @@ export default function Home() {
             <FolderIcon className="text-gray-600" />
           </div>
 
-          {snapshot?.docs.map(doc => (
-            <DocumentRow 
-              key = {doc.id}
-              id = {doc.id}
-              fileName = {doc.data().fileName}
-              date = {doc.data().timestamp}
-            />
-          ))}
+          {documentRows}
         </div>
       </section>
     </div>
   );
 }
 
-export const GetServerSideProps = async () => {
-  const session = await getSession(context);
-  return {
-    props: { session },
-  };
-};
+// export const GetServerSideProps = async () => {
+//   const session = await getSession(context);
+//   return {
+//     props: { session },
+//   };
+// };

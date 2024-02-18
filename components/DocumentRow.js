@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 function DocumentRow({ id, fileName, date }) {
   const router = useRouter();
+  const formattedDate = date ? date.toDate().toLocaleDateString() : "";
   return (
     <div
       onClick={() => router.push(`/doc/${id}`)}
@@ -13,7 +14,7 @@ function DocumentRow({ id, fileName, date }) {
     >
       <ArticleIcon className="text-blue-600" color="blue" size="3xl" />
       <p className="flex-grow pl-5 w-10 pr-10 truncate">{fileName}</p>
-      <p className="pr-5 text-sm">{date.toDate().toLocaleDateString()}</p>
+      <p className="pr-5 text-sm">{formattedDate}</p>
 
       <Button
         color="gray"

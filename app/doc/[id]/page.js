@@ -13,7 +13,7 @@ import TextEditor from "@/components/TextEditor";
 
 
 export default function page({ params }) { 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const id = params.id;
 
@@ -23,6 +23,9 @@ export default function page({ params }) {
     router.replace("/");
   }
 
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
   if (!session) return <Login />;
 
   return (   
@@ -62,6 +65,7 @@ export default function page({ params }) {
             width={40}
             height={40}
             className="cursor-pointer rounded-full ml-2"
+            onClick={() => signOut }
           />
         </header>
 
@@ -70,9 +74,9 @@ export default function page({ params }) {
   );
 }
 
-export const GetServerSideProps = async () => {
-  const session = await getSession(context);
-  return {
-    props: { session },
-  };
-};
+// export const GetServerSideProps = async () => {
+//   const session = await getSession(context);
+//   return {
+//     props: { session },
+//   };
+// };
